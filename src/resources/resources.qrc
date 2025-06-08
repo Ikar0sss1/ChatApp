@@ -1,0 +1,79 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="app">icons/app.png</file>
+        <file alias="user">icons/user.png</file>
+        <file alias="send">icons/send.png</file>
+        <file alias="file">icons/file.png</file>
+        <file alias="emoji">icons/emoji.png</file>
+        <file alias="logo">icons/wechat_logo.png</file>
+        <file>icons/leftTop.png</file>
+        <file>icons/wechat_main_logo.png</file>
+        <file>icons/wx_logo.png</file>
+        <file>icons/default-avatar.png</file>
+        <file>icons/default.png</file>
+        <file>icons/default.jpg</file>
+        <file>icons/otto.png</file>
+        <file>icons/char.png</file>
+        <file>icons/bg.png</file>
+        <file>icons/ark.png</file>
+        <file>icons/github-fill.png</file>
+        <file>icons/correct.png</file>
+        <file>icons/emoji_sel.png</file>
+        <file>icons/emoji_unsel.png</file>
+        <file>icons/exe.png</file>
+        <file>icons/fail.png</file>
+        <file>icons/file_sel.png</file>
+        <file>icons/file_unsel.png</file>
+        <file>icons/FluentMaximize16Regular.png</file>
+        <file>icons/friend_edit_sel.png</file>
+        <file>icons/friend_edit_unsel.png</file>
+        <file>icons/friend_selected.png</file>
+        <file>icons/friend_select_white.png</file>
+        <file>icons/friend_unselected.png</file>
+        <file>icons/IconamoonArrowDown2Bold.png</file>
+        <file>icons/IconamoonArrowUp2Bold.png</file>
+        <file>icons/IconamoonClose.png</file>
+        <file>icons/IconamoonSearch.png</file>
+        <file>icons/LsiconRotationLeftOutline.png</file>
+        <file>icons/LsiconRotationRightOutline.png</file>
+        <file>icons/MajesticonsEyeOff.png</file>
+        <file>icons/MajesticonsLock.png</file>
+        <file>icons/message_selected.png</file>
+        <file>icons/message_select_white.png</file>
+        <file>icons/message_unselected.png</file>
+        <file>icons/MingcuteMinimizeLine.png</file>
+        <file>icons/MingcuteUser2Fill.png</file>
+        <file>icons/mp3.png</file>
+        <file>icons/photo.png</file>
+        <file>icons/RiMessage3Fill.png</file>
+        <file>icons/RiMessage3Line.png</file>
+        <file>icons/RiNotification3Line.png</file>
+        <file>icons/RiSearchLine.png</file>
+        <file>icons/save_image.png</file>
+        <file>icons/TablerBrandUnity.ico</file>
+        <file>icons/TablerBrandUnity.png</file>
+        <file>icons/TablerBrandUnity_empty.png</file>
+        <file>icons/TwemojiGreenCircle.png</file>
+        <file>icons/TwemojiRedCircle.png</file>
+        <file>icons/wait_trans_sel.png</file>
+        <file>icons/wait_trans_unsel.png</file>
+        <file>icons/bk_shadow.png</file>
+        <file>icons/bk_shadow2.png</file>
+        <file>icons/chat.png</file>
+        <file>icons/chat3.png</file>
+        <file>icons/close.png</file>
+        <file>icons/contacts.png</file>
+        <file>icons/exe.ico</file>
+        <file>icons/groups.png</file>
+        <file>icons/img_0.png</file>
+        <file>icons/img_1.png</file>
+        <file>icons/img_2.png</file>
+        <file>icons/img_3.png</file>
+        <file>icons/img_4.png</file>
+        <file>icons/logo-QQ.png</file>
+        <file>icons/logo-QQ2.png</file>
+        <file>icons/message.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/setting.png</file>
+    </qresource>
+</RCC>

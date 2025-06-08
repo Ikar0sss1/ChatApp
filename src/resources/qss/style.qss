@@ -1,0 +1,123 @@
+/* 主窗口背景 */
+QMainWindow, QWidget#MainWindow {
+    background: #F7F7F7;
+}
+
+/* 分割线（Splitter） */
+QSplitter::handle {
+    background: #E5E5E5;
+    width: 1px;
+}
+
+/* 联系人列表 */
+QListWidget {
+    background: #FFFFFF;
+    border: none;
+    font-size: 16px;
+}
+
+QListWidget::item {
+    min-height: 48px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin: 2px;
+    color: #222;
+}
+
+QListWidget::item:selected, QListWidget::item:hover {
+    background: #E1F6EF;           /* 微信绿色淡色 */
+    color: #07C160;
+    border: 1px solid #07C160;
+}
+
+/* 气泡消息 */
+.MessageBubble {
+    background: transparent;
+}
+
+.BubbleMe {
+    background: #95EC69;
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin: 6px 4px 6px 36px;
+    color: #222;
+    font-size: 15px;
+    min-width: 36px;
+    max-width: 380px;
+}
+
+.BubbleYou {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin: 6px 36px 6px 4px;
+    color: #222;
+    font-size: 15px;
+    min-width: 36px;
+    max-width: 380px;
+    border: 1px solid #F0F0F0;
+}
+
+/* 时间戳 */
+.MessageTime {
+    color: #999;
+    font-size: 11px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin: 4px auto;
+}
+
+/* 输入框和底部栏 */
+QLineEdit, QTextEdit {
+    background: #F7F7F7;
+    border: 1px solid #E3E3E3;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+QLineEdit:focus, QTextEdit:focus {
+    border: 1.5px solid #07C160;
+    background: #fff;
+}
+
+/* 底部按钮 */
+QPushButton {
+    min-width: 32px;
+    min-height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+QPushButton:hover {
+    background: #E1F6EF;
+}
+
+QPushButton#SendButton {
+    background: #07C160;
+    color: #fff;
+    font-size: 18px;
+    min-width: 56px;
+    border-radius: 6px;
+}
+QPushButton#SendButton:hover {
+    background: #05a150;
+}
+
+QFileDialog {
+    background: #fff;
+    border-radius: 12px;
+    font-size: 15px;
+}
+QFileDialog QPushButton {
+    background: #07C160;
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 16px;
+}
+QFileDialog QPushButton:hover {
+    background: #06AD56;
+}

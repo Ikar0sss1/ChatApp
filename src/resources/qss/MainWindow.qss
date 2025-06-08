@@ -1,0 +1,157 @@
+/* 主窗口 */
+QMainWindow {
+    background: white;
+}
+
+/* 菜单栏样式 */
+QMenuBar {
+    background: #FFFFFF;
+    border-bottom: 1px solid #E6E6E6;
+    min-height: 28px;
+    padding: 0 10px;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 6px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected {
+    background: #E1F6EF;
+    color: #07C160;
+}
+
+/* 左侧导航栏按钮 */
+#navBar QPushButton {
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    background: transparent;
+}
+
+#navBar QPushButton:hover {
+    background: #3E3E3E;
+}
+
+#navBar QPushButton:checked {
+    background: #4C4C4C;
+}
+
+/* 联系人列表面板 */
+#contactPanel {
+    background: white;
+    border: none;
+}
+
+/* 搜索框 */
+QLineEdit#searchBox {
+    background: #F5F5F5;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 10px;
+    font-size: 13px;
+}
+
+/* 左侧面板 */
+#leftPanel {
+    background: white;
+    border-right: 1px solid #E6E6E6;
+}
+
+/* 联系人列表 */
+ContactListWidget {
+    background: white;
+    border: none;
+}
+
+QListWidget {
+    background: white;
+    border: none;
+    outline: none;
+}
+
+QListWidget::item {
+    min-height: 48px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin: 2px;
+    color: #222;
+}
+
+QListWidget::item:selected, QListWidget::item:hover {
+    background: #E1F6EF;
+    color: #07C160;
+    border: 1px solid #07C160;
+}
+
+/* 聊天窗口 */
+ChatWindow {
+    background: white;
+}
+
+/* 输入框 */
+QLineEdit, QTextEdit {
+    background: #F7F7F7;
+    border: 1px solid #E3E3E3;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+QLineEdit:focus, QTextEdit:focus {
+    border: 1.5px solid #07C160;
+    background: #fff;
+}
+
+/* 分割线 */
+QSplitter::handle {
+    background: #E6E6E6;
+    width: 1px;
+}
+
+/* 按钮样式 */
+QPushButton {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #07C160;
+}
+
+QPushButton:hover {
+    background: #E1F6EF;
+}
+
+QPushButton#SendButton {
+    background: #07C160;
+    color: #fff;
+    font-size: 18px;
+    min-width: 56px;
+    border-radius: 6px;
+}
+
+QPushButton#SendButton:hover {
+    background: #06AD56;
+}
+
+/* 头像标签 */
+QLabel#m_myAvatarLabel {
+    border-radius: 24px;
+    background: #eee;
+}
+
+/* 更换头像按钮 */
+QPushButton#m_editAvatarBtn {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #07C160;
+}
+
+QPushButton#m_editAvatarBtn:hover {
+    background: #E1F6EF;
+}

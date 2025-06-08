@@ -1,0 +1,52 @@
+/* 主窗口 */
+QDialog#LoginWindow {
+    background-color: #F5F5F5;
+    border: none;
+}
+
+/* 标题 */
+QLabel#titleLabel {
+    font-size: 24px;
+    font-weight: bold;
+    color: #07C160;
+    padding: 20px 0;
+}
+
+/* 输入框 */
+QLineEdit {
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    margin: 5px 30px;
+}
+QLineEdit:focus {
+    border-color: #07C160;
+}
+
+/* 登录按钮 */
+QPushButton#loginButton {
+    background-color: #07C160;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    min-width: 120px;
+    margin: 15px 30px;
+}
+QPushButton#loginButton:hover {
+    background-color: #05A14F;
+}
+QPushButton#loginButton:pressed {
+    background-color: #038B43;
+}
+
+/* 状态标签 */
+QLabel#statusLabel {
+    color: #FF4D4F;
+    font-size: 12px;
+    margin: 5px 30px;
+}
