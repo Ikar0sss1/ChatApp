@@ -2,6 +2,7 @@
 #include "core/UserManager.h"
 #include "ContactListWidget.h"
 #include "ChatWindow.h"
+#include "LoginWindow.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QInputDialog>
@@ -24,6 +25,8 @@
 #include <QApplication>
 #include <QSettings>
 #include "core/NetworkManager.h"
+#include <QPainter>
+#include <QBrush>
 
 void applyAppStyle(bool darkMode, int fontSize) {
     QString qss;
@@ -40,14 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
-    setStyleSheet("QMainWindow { background: #F7F7F7; }");
-    
-    // 添加阴影效果
-    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(20);
-    shadow->setOffset(0, 6);
-    shadow->setColor(QColor(0, 0, 0, 80));
-    setGraphicsEffect(shadow);
+    setStyleSheet("QMainWindow { background: #f5f5f5; }");
     
     QSettings settings("YourCompany", "YourApp");
     int fontSize = settings.value("fontSize", 15).toInt();
@@ -70,25 +66,34 @@ MainWindow::MainWindow(QWidget *parent)
         QString receiverId = message.getReceiverId();
         
         QString contactId;
-        // 判断对话的另一方是谁
+        
+        // 判断消息方向和对话窗口应该属于哪个联系人
         if (senderId == myId) {
-            // 我发送的消息，对话窗口应该是接收者
+            // 我发送的消息，对话窗口应该是与接收者的窗口
             contactId = receiverId;
         } else {
-            // 别人发送给我的消息，对话窗口应该是发送者
+            // 别人发给我的消息，对话窗口应该是与发送者的窗口
             contactId = senderId;
         }
         
         // 分发到对应的聊天窗口
         if (m_chatWindows.contains(contactId)) {
-            m_chatWindows[contactId]->addMessage(message);
-        }
-    });
-
-    connect(m_refreshButton, &QPushButton::clicked, this, [this](){
-        ChatWindow* currentChat = qobject_cast<ChatWindow*>(m_chatStack->currentWidget());
-        if (currentChat) {
-            currentChat->refreshMessages();
+            // ChatWindow已经连接了NetworkManager::messageReceived信号
+            // 它会处理属于自己的消息，这里不需要再处理
+        } else {
+            // 如果没有打开对话窗口但收到了消息，创建一个新窗口
+            // 但只有当我不是发送者或者是接收者时才需要创建窗口
+            if (senderId != myId || receiverId == myId) {
+                ChatWindow* chatWindow = new ChatWindow(contactId);
+                m_chatWindows[contactId] = chatWindow;
+                m_chatStack->addWidget(chatWindow);
+                
+                // 如果是我收到的消息，需要高亮联系人
+                if (receiverId == myId) {
+                    // 高亮联系人列表中的该联系人
+                    m_contactList->highlightContact(contactId, true);
+                }
+            }
         }
     });
 }
@@ -99,7 +104,7 @@ void MainWindow::setupUI()
 
     // 主容器
     QWidget* centralWidget = new QWidget();
-    centralWidget->setStyleSheet("background: #F7F7F7;");
+    centralWidget->setStyleSheet("background: #f5f5f5;");
     setCentralWidget(centralWidget);
 
     QVBoxLayout* mainLayout = new QVBoxLayout(centralWidget);
@@ -116,7 +121,7 @@ void MainWindow::setupUI()
 void MainWindow::setupTitleBar(QVBoxLayout* mainLayout)
 {
     QWidget* titleBar = new QWidget();
-    titleBar->setFixedHeight(45);
+    titleBar->setFixedHeight(50);
     titleBar->setStyleSheet("background: #FFFFFF; border-bottom: 1px solid #E6E6E6;");
     
     QHBoxLayout* titleLayout = new QHBoxLayout(titleBar);
@@ -126,29 +131,55 @@ void MainWindow::setupTitleBar(QVBoxLayout* mainLayout)
     // 左侧Logo和标题
     QHBoxLayout* leftLayout = new QHBoxLayout();
     leftLayout->setContentsMargins(12, 0, 0, 0);
-    leftLayout->setSpacing(8);
+    leftLayout->setSpacing(12);
     
     m_myAvatarLabel = new QLabel();
-    m_myAvatarLabel->setFixedSize(48, 48);
-    m_myAvatarLabel->setStyleSheet("border-radius: 24px; background: #eee;");
+    m_myAvatarLabel->setFixedSize(36, 36);
+    m_myAvatarLabel->setStyleSheet("border-radius: 18px; background: #eee;");
     QString avatarPath = UserManager::getInstance().getCurrentUser().getAvatar();
     if (!avatarPath.isEmpty() && QFile::exists(avatarPath)) {
-        m_myAvatarLabel->setPixmap(QPixmap(avatarPath).scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QPixmap avatarPixmap(avatarPath);
+        if(!avatarPixmap.isNull()) {
+            // 创建圆形头像
+            QPixmap rounded(36, 36);
+            rounded.fill(Qt::transparent);
+            QPainter painter(&rounded);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(QBrush(avatarPixmap.scaled(36, 36, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+            painter.drawEllipse(0, 0, 36, 36);
+            m_myAvatarLabel->setPixmap(rounded);
+        }
     } else {
-        m_myAvatarLabel->setPixmap(QPixmap(":/icons/logo").scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_myAvatarLabel->setPixmap(QPixmap(":/icons/default-avatar.png").scaled(36, 36, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     leftLayout->addWidget(m_myAvatarLabel);
+
+    QLabel* titleLabel = new QLabel("聊天应用");
+    titleLabel->setStyleSheet("font-size: 16px; font-weight: bold; color: #333333;");
+    leftLayout->addWidget(titleLabel);
 
     m_editAvatarBtn = new QPushButton("更换头像");
     m_editAvatarBtn->setCursor(Qt::PointingHandCursor);
     m_editAvatarBtn->setStyleSheet(
-        "QPushButton { background: #F7F7F7; border: 1.5px solid #E3E3E3; border-radius: 8px; color: #222; font-size: 14px; padding: 6px 16px; }"
-        "QPushButton:hover { background: #E1F6EF; border-color: #07C160; color: #07C160; }"
+        "QPushButton { background: #f5f5f5; border: none; border-radius: 4px; color: #222; font-size: 13px; padding: 6px 12px; }"
+        "QPushButton:hover { background: #e1e1e1; color: #2196F3; }"
     );
     connect(m_editAvatarBtn, &QPushButton::clicked, this, [=](){
         QString file = QFileDialog::getOpenFileName(this, "选择头像", "", "图片文件 (*.png *.jpg *.jpeg)");
         if (!file.isEmpty()) {
-            m_myAvatarLabel->setPixmap(QPixmap(file).scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            QPixmap avatarPixmap(file);
+            if(!avatarPixmap.isNull()) {
+                // 创建圆形头像
+                QPixmap rounded(36, 36);
+                rounded.fill(Qt::transparent);
+                QPainter painter(&rounded);
+                painter.setRenderHint(QPainter::Antialiasing);
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(QBrush(avatarPixmap.scaled(36, 36, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                painter.drawEllipse(0, 0, 36, 36);
+                m_myAvatarLabel->setPixmap(rounded);
+            }
             UserManager::getInstance().updateCurrentUserAvatar(file);
             refreshMyAvatar();
         }
@@ -158,59 +189,98 @@ void MainWindow::setupTitleBar(QVBoxLayout* mainLayout)
     leftLayout->addStretch();
     titleLayout->addLayout(leftLayout);
 
+    // 添加退出登录按钮
+    m_logoutButton = new QPushButton("退出登录");
+    m_logoutButton->setCursor(Qt::PointingHandCursor);
+    m_logoutButton->setStyleSheet(
+        "QPushButton { background: #f44336; border: none; border-radius: 4px; color: white; font-size: 13px; padding: 6px 12px; }"
+        "QPushButton:hover { background: #e53935; }"
+    );
+    connect(m_logoutButton, &QPushButton::clicked, this, &MainWindow::onLogoutClicked);
+    titleLayout->addWidget(m_logoutButton);
+    
     // 右侧控制按钮
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     buttonLayout->setSpacing(8);
 
-    // 设置按钮用⚙️字符
-    m_settingsButton = new QPushButton("⚙️");
+    // 设置按钮 - 使用齿轮符号 ⚙
+    m_settingsButton = new QPushButton("⚙");
     m_settingsButton->setFixedSize(32, 32);
     m_settingsButton->setStyleSheet(
         "QPushButton { "
         "   background: transparent; "
-        "   border: none; "
-        "   border-radius: 6px; "
-        "   font-size: 20px; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 16px; "
         "   color: #666666; "
         "} "
         "QPushButton:hover { "
-        "   background: #E1F6EF; "
-        "   color: #07C160; "
+        "   background: #e0e0e0; "
+        "   color: #333333; "
         "}"
     );
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::onSettingsClicked);
     buttonLayout->addWidget(m_settingsButton);
 
-    m_minButton = new QPushButton("–");
+    // 最小化按钮 - 使用下划线符号 −
+    m_minButton = new QPushButton("−");
     m_minButton->setFixedSize(32, 32);
     m_minButton->setStyleSheet(
         "QPushButton { "
         "   background: transparent; "
-        "   border: none; "
-        "   border-radius: 6px; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
         "   font-size: 16px; "
+        "   font-weight: bold; "
         "   color: #666666; "
         "} "
         "QPushButton:hover { "
-        "   background: #F0F0F0; "
+        "   background: #e0e0e0; "
+        "   color: #333333; "
         "}"
     );
     connect(m_minButton, &QPushButton::clicked, this, &MainWindow::onMinimizeClicked);
     buttonLayout->addWidget(m_minButton);
 
+    // 最大化按钮 - 使用方框符号 ☐
+    m_maxButton = new QPushButton("☐");
+    m_maxButton->setFixedSize(32, 32);
+    m_maxButton->setStyleSheet(
+        "QPushButton { "
+        "   background: transparent; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 14px; "
+        "   color: #666666; "
+        "} "
+        "QPushButton:hover { "
+        "   background: #e0e0e0; "
+        "   color: #333333; "
+        "}"
+    );
+    connect(m_maxButton, &QPushButton::clicked, this, &MainWindow::onMaximizeClicked);
+    buttonLayout->addWidget(m_maxButton);
+
+    // 关闭按钮 - 使用 × 符号
     m_closeButton = new QPushButton("×");
     m_closeButton->setFixedSize(32, 32);
     m_closeButton->setStyleSheet(
         "QPushButton { "
         "   background: transparent; "
-        "   border: none; "
-        "   border-radius: 6px; "
-        "   font-size: 20px; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 18px; "
+        "   font-weight: bold; "
         "   color: #666666; "
         "} "
         "QPushButton:hover { "
         "   background: #FF5F56; "
         "   color: white; "
+        "   border-color: #FF5F56; "
         "}"
     );
     connect(m_closeButton, &QPushButton::clicked, this, &MainWindow::onCloseClicked);
@@ -225,8 +295,9 @@ void MainWindow::setupMainContent(QVBoxLayout* mainLayout)
 {
     // 创建主分割器
     QSplitter* splitter = new QSplitter();
-    splitter->setHandleWidth(0);
+    splitter->setHandleWidth(1);
     splitter->setChildrenCollapsible(false);
+    splitter->setStyleSheet("QSplitter::handle { background-color: #e0e0e0; }");
 
     // 左侧面板
     setupLeftPanel(splitter);
@@ -235,7 +306,7 @@ void MainWindow::setupMainContent(QVBoxLayout* mainLayout)
     setupChatArea(splitter);
 
     // 设置分割器比例
-    splitter->setSizes({300, 700});
+    splitter->setSizes({260, 740});
     
     mainLayout->addWidget(splitter);
 }
@@ -243,8 +314,8 @@ void MainWindow::setupMainContent(QVBoxLayout* mainLayout)
 void MainWindow::setupLeftPanel(QSplitter* splitter)
 {
     QWidget* leftPanel = new QWidget();
-    leftPanel->setFixedWidth(300);
-    leftPanel->setStyleSheet("background: #FFFFFF; border-right: 1px solid #E6E6E6;");
+    leftPanel->setFixedWidth(260);
+    leftPanel->setStyleSheet("background: #FFFFFF;");
     
     QVBoxLayout* leftLayout = new QVBoxLayout(leftPanel);
     leftLayout->setContentsMargins(0, 0, 0, 0);
@@ -253,14 +324,14 @@ void MainWindow::setupLeftPanel(QSplitter* splitter)
     // 导航栏
     setupNavigationBar(leftLayout);
     
-    // 搜索区域 - 重新添加胶囊形状搜索栏
+    // 搜索区域
     setupSearchArea(leftLayout);
     
     // 联系人列表
     m_contactList = new ContactListWidget();
     m_contactList->setStyleSheet(
         "ContactListWidget { "
-        "   background: transparent; "
+        "   background: #FFFFFF; "
         "   border: none; "
         "}"
     );
@@ -274,38 +345,41 @@ void MainWindow::setupNavigationBar(QVBoxLayout* leftLayout)
 {
     QWidget* navBar = new QWidget();
     navBar->setFixedHeight(50);
-    navBar->setStyleSheet("background: #FFFFFF; border-bottom: 1px solid #F0F0F0;");
+    navBar->setStyleSheet("background: #FAFAFA; border-bottom: 1px solid #F0F0F0;");
     
     QHBoxLayout* navLayout = new QHBoxLayout(navBar);
-    navLayout->setContentsMargins(15, 0, 15, 0);
-    navLayout->setSpacing(20);
+    navLayout->setContentsMargins(12, 0, 12, 0);
+    navLayout->setSpacing(8);
 
-    // 聊天按钮
-    m_chatNavButton = new QPushButton("聊天");
-    m_chatNavButton->setFixedSize(60, 35);
+    // 聊天按钮 - 可以保留图标或改为符号 💬
+    m_chatNavButton = new QPushButton("💬 聊天");
+    m_chatNavButton->setFixedHeight(36);
     m_chatNavButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
-        "   border-radius: 6px; "
+        "   border-radius: 4px; "
         "   color: white; "
         "   font-size: 14px; "
-        "   font-weight: bold; "
+        "   padding-left: 12px; "
+        "   text-align: left; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     navLayout->addWidget(m_chatNavButton);
 
-    // 联系人按钮
-    m_contactNavButton = new QPushButton("联系人");
-    m_contactNavButton->setFixedSize(60, 35);
+    // 联系人按钮 - 可以保留图标或改为符号 👥
+    m_contactNavButton = new QPushButton("👥 联系人");
+    m_contactNavButton->setFixedHeight(36);
     m_contactNavButton->setStyleSheet(
         "QPushButton { "
         "   background: transparent; "
         "   border: none; "
-        "   border-radius: 6px; "
+        "   border-radius: 4px; "
         "   color: #666666; "
         "   font-size: 14px; "
+        "   padding-left: 12px; "
+        "   text-align: left; "
         "} "
         "QPushButton:hover { background: #F0F0F0; }"
     );
@@ -318,14 +392,14 @@ void MainWindow::setupNavigationBar(QVBoxLayout* leftLayout)
     m_addContactButton->setFixedSize(30, 30);
     m_addContactButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
-        "   border-radius: 15px; "
+        "   border-radius: 4px; "
         "   color: white; "
         "   font-size: 18px; "
         "   font-weight: bold; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     connect(m_addContactButton, &QPushButton::clicked, this, &MainWindow::onAddContactClicked);
     navLayout->addWidget(m_addContactButton);
@@ -336,34 +410,45 @@ void MainWindow::setupNavigationBar(QVBoxLayout* leftLayout)
 void MainWindow::setupSearchArea(QVBoxLayout* leftLayout)
 {
     QWidget* searchContainer = new QWidget();
-    searchContainer->setFixedHeight(60);
+    searchContainer->setFixedHeight(50);
     searchContainer->setStyleSheet("background: #FFFFFF;");
     
-    QVBoxLayout* searchLayout = new QVBoxLayout(searchContainer);
-    searchLayout->setContentsMargins(15, 10, 15, 10);
+    QHBoxLayout* searchLayout = new QHBoxLayout(searchContainer);
+    searchLayout->setContentsMargins(12, 8, 12, 8);
+    
+    QWidget* searchBox = new QWidget();
+    searchBox->setStyleSheet(
+        "background: #F5F5F5; "
+        "border-radius: 4px; "
+    );
+    
+    QHBoxLayout* searchBoxLayout = new QHBoxLayout(searchBox);
+    searchBoxLayout->setContentsMargins(8, 0, 8, 0);
+    searchBoxLayout->setSpacing(6);
+    
+    // 搜索图标 - 使用符号 🔍
+    QLabel* searchIcon = new QLabel("🔍");
+    searchIcon->setStyleSheet("font-size: 14px;");
+    searchBoxLayout->addWidget(searchIcon);
     
     m_searchEdit = new QLineEdit();
     m_searchEdit->setPlaceholderText("搜索联系人");
-    m_searchEdit->setFixedHeight(36);
+    m_searchEdit->setFixedHeight(34);
+    m_searchEdit->setFrame(false);
     m_searchEdit->setStyleSheet(
         "QLineEdit { "
-        "   background: #F5F5F5; "
-        "   border: 1px solid #E0E0E0; "
-        "   border-radius: 18px; "  // 胶囊形状：高度的一半
-        "   padding: 0 16px; "
+        "   background: transparent; "
+        "   border: none; "
         "   font-size: 14px; "
         "   color: #333333; "
         "} "
-        "QLineEdit:focus { "
-        "   border: 1px solid #07C160; "
-        "   background: #FFFFFF; "
-        "}"
     );
     connect(m_searchEdit, &QLineEdit::textChanged, this, [=](const QString& text){
         m_contactList->filterContacts(text);
     });
-    searchLayout->addWidget(m_searchEdit);
+    searchBoxLayout->addWidget(m_searchEdit);
     
+    searchLayout->addWidget(searchBox);
     leftLayout->addWidget(searchContainer);
 }
 
@@ -383,15 +468,21 @@ void MainWindow::setupChatArea(QSplitter* splitter)
     QVBoxLayout* welcomeLayout = new QVBoxLayout(welcomeWidget);
     welcomeLayout->setAlignment(Qt::AlignCenter);
     
-    QLabel* welcomeIcon = new QLabel();
-    welcomeIcon->setPixmap(QPixmap(":/icons/logo").scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    // 聊天图标 - 使用符号
+    QLabel* welcomeIcon = new QLabel("💬");
     welcomeIcon->setAlignment(Qt::AlignCenter);
+    welcomeIcon->setStyleSheet("font-size: 80px;");
     welcomeLayout->addWidget(welcomeIcon);
     
-    QLabel* welcomeText = new QLabel("请选择一个联系人开始聊天");
+    QLabel* welcomeText = new QLabel("选择一个联系人开始聊天");
     welcomeText->setAlignment(Qt::AlignCenter);
-    welcomeText->setStyleSheet("font-size: 16px; color: #999999; margin-top: 20px;");
+    welcomeText->setStyleSheet("font-size: 16px; color: #666666; margin-top: 20px;");
     welcomeLayout->addWidget(welcomeText);
+    
+    QLabel* welcomeSubText = new QLabel("在左侧列表中点击联系人即可开始对话");
+    welcomeSubText->setAlignment(Qt::AlignCenter);
+    welcomeSubText->setStyleSheet("font-size: 14px; color: #999999; margin-top: 10px;");
+    welcomeLayout->addWidget(welcomeSubText);
 
     m_chatStack = new QStackedWidget();
     m_chatStack->addWidget(welcomeWidget);
@@ -410,7 +501,7 @@ void MainWindow::onContactSelected(const QString& contactId)
     m_chatStack->setCurrentWidget(m_chatWindows[contactId]);
 
     // 取消高亮
-    m_contactList->highlightContact(contactId, false); // 你可以扩展 highlightContact 支持取消高亮
+    m_contactList->highlightContact(contactId, false);
 }
 
 void MainWindow::onAddContactClicked()
@@ -430,6 +521,17 @@ void MainWindow::onAddContactClicked()
 void MainWindow::onMinimizeClicked()
 {
     showMinimized();
+}
+
+void MainWindow::onMaximizeClicked()
+{
+    if (isMaximized()) {
+        showNormal();
+        m_maxButton->setText("☐");  // 最大化符号
+    } else {
+        showMaximized();
+        m_maxButton->setText("❐");  // 还原符号
+    }
 }
 
 void MainWindow::onCloseClicked()
@@ -464,9 +566,20 @@ void MainWindow::refreshMyAvatar()
 {
     QString avatarPath = UserManager::getInstance().getCurrentUser().getAvatar();
     if (!avatarPath.isEmpty() && QFile::exists(avatarPath)) {
-        m_myAvatarLabel->setPixmap(QPixmap(avatarPath).scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QPixmap avatarPixmap(avatarPath);
+        if(!avatarPixmap.isNull()) {
+            // 创建圆形头像
+            QPixmap rounded(36, 36);
+            rounded.fill(Qt::transparent);
+            QPainter painter(&rounded);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(QBrush(avatarPixmap.scaled(36, 36, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+            painter.drawEllipse(0, 0, 36, 36);
+            m_myAvatarLabel->setPixmap(rounded);
+        }
     } else {
-        m_myAvatarLabel->setPixmap(QPixmap(":/icons/logo").scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_myAvatarLabel->setPixmap(QPixmap(":/icons/default-avatar.png").scaled(36, 36, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
@@ -493,5 +606,36 @@ void MainWindow::onSettingsClicked()
         settings.setValue("downloadPath", dlg.downloadPath());
         // 应用全局样式
         applyAppStyle(darkMode, fontSize);
+    }
+}
+
+// 添加退出登录方法
+void MainWindow::onLogoutClicked()
+{
+    // 弹出确认对话框
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this, 
+        "退出登录", 
+        "确定要退出登录吗？",
+        QMessageBox::Yes | QMessageBox::No
+    );
+    
+    if (reply == QMessageBox::Yes) {
+        // 执行退出登录逻辑
+        UserManager::getInstance().logout();
+        
+        // 显示退出动画
+        QPropertyAnimation* anim = new QPropertyAnimation(this, "windowOpacity");
+        anim->setDuration(400);
+        anim->setStartValue(1.0);
+        anim->setEndValue(0.0);
+        connect(anim, &QPropertyAnimation::finished, this, [=](){
+            // 创建并显示登录窗口
+            LoginWindow* loginWindow = new LoginWindow();
+            loginWindow->show();
+            // 关闭当前窗口
+            close();
+        });
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }

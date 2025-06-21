@@ -46,9 +46,9 @@ void ContactListWidget::setupUI()
     m_removeButton = new QPushButton("删除联系人");
     m_removeButton->setMinimumHeight(36);
     m_removeButton->setStyleSheet(
-        "QPushButton { background-color: #07C160; color: white; border: none; border-radius: 4px; font-size: 15px; min-width: 100px; }"
-        "QPushButton:hover { background-color: #05A150; }"
-        "QPushButton:pressed { background-color: #038B43; }"
+        "QPushButton { background-color: #2196F3; color: white; border: none; border-radius: 4px; font-size: 14px; min-width: 100px; }"
+        "QPushButton:hover { background-color: #1E88E5; }"
+        "QPushButton:pressed { background-color: #1976D2; }"
     );
     connect(m_removeButton, &QPushButton::clicked, this, &ContactListWidget::onRemoveContactClicked);
     buttonLayout->addWidget(m_removeButton);
@@ -56,9 +56,9 @@ void ContactListWidget::setupUI()
     m_refreshButton = new QPushButton("刷新");
     m_refreshButton->setMinimumHeight(36);
     m_refreshButton->setStyleSheet(
-        "QPushButton { background-color: #07C160; color: white; border: none; border-radius: 4px; font-size: 15px; min-width: 80px; }"
-        "QPushButton:hover { background-color: #05A150; }"
-        "QPushButton:pressed { background-color: #038B43; }"
+        "QPushButton { background-color: #2196F3; color: white; border: none; border-radius: 4px; font-size: 14px; min-width: 80px; }"
+        "QPushButton:hover { background-color: #1E88E5; }"
+        "QPushButton:pressed { background-color: #1976D2; }"
     );
     connect(m_refreshButton, &QPushButton::clicked, this, &ContactListWidget::onRefreshClicked);
     buttonLayout->addWidget(m_refreshButton);

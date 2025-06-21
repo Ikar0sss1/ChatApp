@@ -1,0 +1,6 @@
+{
+    "qtConfigure.qtKitDir": "e:/Qt/6.7.3/mingw_64",
+    "files.associations": {
+        "string": "cpp"
+    }
+}

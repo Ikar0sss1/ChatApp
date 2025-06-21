@@ -60,6 +60,8 @@ set(UI_SOURCES
     src/ui/MessageBubble.h
     src/ui/RegisterWindow.cpp
     src/ui/RegisterWindow.h
+    src/ui/ForgotPasswordWindow.cpp
+    src/ui/ForgotPasswordWindow.h
     src/ui/InputWindow.cpp
     src/ui/DeleteWindow.cpp
     src/ui/SettingsDialog.cpp

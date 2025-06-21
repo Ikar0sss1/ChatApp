@@ -1,6 +1,7 @@
 #include "LoginWindow.h"
 #include "MainWindow.h"
 #include "RegisterWindow.h"
+#include "ForgotPasswordWindow.h"
 #include "core/UserManager.h"
 #include "utils/Config.h"
 #include <QMessageBox>
@@ -40,65 +41,119 @@ LoginWindow::LoginWindow(QWidget *parent)
 
 void LoginWindow::setupUI()
 {
-    setWindowTitle("登录 - Simple IMChat");
-    setFixedSize(360, 520);
-
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
+    setFixedSize(400, 500);
+    
     QVBoxLayout* outerLayout = new QVBoxLayout(this);
     outerLayout->setContentsMargins(0, 0, 0, 0);
-
+    
     QWidget* bgWidget = new QWidget(this);
     bgWidget->setObjectName("bgWidget");
     bgWidget->setStyleSheet(
         "#bgWidget {"
         "background: white;"
-        "border-radius: 18px;"
+        "border-radius: 8px;"
         "}"
     );
     
     QVBoxLayout* layout = new QVBoxLayout(bgWidget);
     layout->setSpacing(15);
-    layout->setContentsMargins(30, 30, 30, 30);
-
-    // 阴影
-    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(bgWidget);
-    shadow->setBlurRadius(24);
-    shadow->setOffset(0, 4);
-    shadow->setColor(QColor(0,0,0,60));
-    bgWidget->setGraphicsEffect(shadow);
+    layout->setContentsMargins(30, 20, 30, 30);
 
     // 右上角按钮布局
     QHBoxLayout* titleLayout = new QHBoxLayout();
     titleLayout->setContentsMargins(0, 0, 0, 0);
     titleLayout->addStretch();
 
-    m_minButton = new QPushButton("-");
+    // 最小化按钮 - 使用减号符号 −
+    m_minButton = new QPushButton("−");
     m_minButton->setFixedSize(28, 28);
-    m_minButton->setStyleSheet("QPushButton { background: #F0F0F0; border: none; border-radius: 4px; font-size: 18px; } QPushButton:hover { background: #E1F6EF; }");
+    m_minButton->setStyleSheet(
+        "QPushButton { "
+        "   background: transparent; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 14px; "
+        "   font-weight: bold; "
+        "   color: #666666; "
+        "} "
+        "QPushButton:hover { "
+        "   background: #e0e0e0; "
+        "   color: #333333; "
+        "}"
+    );
     connect(m_minButton, &QPushButton::clicked, this, &LoginWindow::onMinimizeClicked);
     titleLayout->addWidget(m_minButton);
+    
+    // 最大化按钮 - 使用方框符号 ☐
+    m_maxButton = new QPushButton("☐");
+    m_maxButton->setFixedSize(28, 28);
+    m_maxButton->setStyleSheet(
+        "QPushButton { "
+        "   background: transparent; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 12px; "
+        "   color: #666666; "
+        "} "
+        "QPushButton:hover { "
+        "   background: #e0e0e0; "
+        "   color: #333333; "
+        "}"
+    );
+    connect(m_maxButton, &QPushButton::clicked, this, &LoginWindow::onMaximizeClicked);
+    titleLayout->addWidget(m_maxButton);
 
+    // 关闭按钮 - 使用 × 符号
     m_closeButton = new QPushButton("×");
     m_closeButton->setFixedSize(28, 28);
-    m_closeButton->setStyleSheet("QPushButton { background: #F0F0F0; border: none; border-radius: 4px; font-size: 18px; } QPushButton:hover { background: #FF4D4F; color: white; }");
+    m_closeButton->setStyleSheet(
+        "QPushButton { "
+        "   background: transparent; "
+        "   border: 1px solid #e0e0e0; "
+        "   border-radius: 4px; "
+        "   padding: 0px; "
+        "   font-size: 16px; "
+        "   font-weight: bold; "
+        "   color: #666666; "
+        "} "
+        "QPushButton:hover { "
+        "   background: #FF5F56; "
+        "   color: white; "
+        "   border-color: #FF5F56; "
+        "}"
+    );
     connect(m_closeButton, &QPushButton::clicked, this, &LoginWindow::onCloseClicked);
     titleLayout->addWidget(m_closeButton);
 
     layout->addLayout(titleLayout);
 
-    // 头像
-    m_avatarLabel = new QLabel();
+    // 头像和标题组合
+    QVBoxLayout* headerLayout = new QVBoxLayout();
+    headerLayout->setAlignment(Qt::AlignCenter);
+    
+    // 头像 - 使用用户符号 👤
+    m_avatarLabel = new QLabel("👤");
     m_avatarLabel->setFixedSize(80, 80);
     m_avatarLabel->setAlignment(Qt::AlignCenter);
-    m_avatarLabel->setStyleSheet("border-radius: 40px; background: #eee;");
-    layout->addWidget(m_avatarLabel, 0, Qt::AlignHCenter);
-    m_avatarLabel->setPixmap(QPixmap(":/icons/logo").scaled(80, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_avatarLabel->setStyleSheet(
+        "border-radius: 40px; "
+        "background: #f5f5f5; "
+        "font-size: 40px; "
+        "color: #999999;"
+    );
+    headerLayout->addWidget(m_avatarLabel, 0, Qt::AlignHCenter);
 
     // 标题
-    QLabel* titleLabel = new QLabel("微信登录");
+    QLabel* titleLabel = new QLabel("用户登录");
     titleLabel->setObjectName("titleLabel");
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("QLabel#titleLabel { font-size: 22px; color: #353535; }");
-    layout->addWidget(titleLabel);
+    titleLabel->setStyleSheet("QLabel#titleLabel { font-size: 22px; color: #333333; margin-top: 10px; }");
+    headerLayout->addWidget(titleLabel);
+    
+    layout->addLayout(headerLayout);
     layout->addSpacing(20);
 
     // 用户名输入框
@@ -107,7 +162,8 @@ void LoginWindow::setupUI()
     m_usernameEdit->setMinimumHeight(40);
     m_usernameEdit->setStyleSheet(
         "QLineEdit { "
-        "   border: 1px solid #DCDCDC; "
+        "   border: none; "
+        "   background-color: #f5f5f5; "
         "   border-radius: 4px; "
         "   padding: 0 10px; "
         "   font-size: 14px; "
@@ -127,13 +183,17 @@ void LoginWindow::setupUI()
     QHBoxLayout* captchaLayout = new QHBoxLayout();
     m_codeEdit = new QLineEdit();
     m_codeEdit->setPlaceholderText("输入验证码");
-    m_codeEdit->setMinimumHeight(36);
+    m_codeEdit->setMinimumHeight(40);
     m_codeEdit->setMaximumWidth(100);
+    m_codeEdit->setStyleSheet(m_usernameEdit->styleSheet());
     captchaLayout->addWidget(m_codeEdit);
 
     m_captchaLabel = new QLabel();
-    m_captchaLabel->setFixedSize(90, 36);
-    m_captchaLabel->setStyleSheet("border-radius: 6px; background: #F7F7F7; border: 1px solid #E3E3E3;");
+    m_captchaLabel->setFixedSize(90, 40);
+    m_captchaLabel->setStyleSheet("border-radius: 4px; background: #f0f0f0; border: 1px solid #e0e0e0;");
+    m_captchaLabel->setCursor(Qt::PointingHandCursor);
+    m_captchaLabel->setToolTip("点击刷新验证码");
+    m_captchaLabel->installEventFilter(this);
     captchaLayout->addWidget(m_captchaLabel);
 
     layout->addLayout(captchaLayout);
@@ -148,15 +208,15 @@ void LoginWindow::setupUI()
     m_loginButton->setCursor(Qt::PointingHandCursor);
     m_loginButton->setStyleSheet(
         "QPushButton { "
-        "   background-color: #07C160; "
+        "   background-color: #2196F3; "
         "   border: none; "
         "   border-radius: 4px; "
         "   color: white; "
         "   font-size: 15px; "
         "} "
-        "QPushButton:hover { background-color: #06AD56; } "
-        "QPushButton:pressed { background-color: #059B4C; } "
-        "QPushButton:disabled { background-color: #91E6B3; }"
+        "QPushButton:hover { background-color: #1E88E5; } "
+        "QPushButton:pressed { background-color: #1976D2; } "
+        "QPushButton:disabled { background-color: #BBDEFB; }"
     );
     connect(m_loginButton, &QPushButton::clicked, this, &LoginWindow::onLoginClicked);
     layout->addWidget(m_loginButton);
@@ -164,13 +224,13 @@ void LoginWindow::setupUI()
     // 状态标签
     m_statusLabel = new QLabel();
     m_statusLabel->setAlignment(Qt::AlignCenter);
-    m_statusLabel->setStyleSheet("color: #FF0000;");
+    m_statusLabel->setStyleSheet("color: #f44336; font-size: 13px;");
     layout->addWidget(m_statusLabel);
 
     // 底部链接
     QHBoxLayout* bottomLayout = new QHBoxLayout();
-    QLabel* registerLink = new QLabel("<a href=\"#\" style=\"color:#07C160;text-decoration:none;\">注册账号</a>");
-    QLabel* forgotLink = new QLabel("<a href=\"#\" style=\"color:#07C160;text-decoration:none;\">忘记密码</a>");
+    QLabel* registerLink = new QLabel("<a href=\"#\" style=\"color:#2196F3;text-decoration:none;\">注册账号</a>");
+    QLabel* forgotLink = new QLabel("<a href=\"#\" style=\"color:#2196F3;text-decoration:none;\">忘记密码</a>");
     registerLink->setCursor(Qt::PointingHandCursor);
     forgotLink->setCursor(Qt::PointingHandCursor);
     connect(registerLink, &QLabel::linkActivated, this, &LoginWindow::onRegisterClicked);
@@ -270,8 +330,13 @@ void LoginWindow::onRegisterClicked()
 
 void LoginWindow::onForgotPasswordClicked()
 {
-    // TODO: 打开找回密码窗口
-    QMessageBox::information(this, "提示", "找回密码功能开发中...");
+    ForgotPasswordWindow* forgotPasswordWindow = new ForgotPasswordWindow(this);
+    if (forgotPasswordWindow->exec() == QDialog::Accepted) {
+        // 重置成功，可以提示用户使用新密码登录
+        m_statusLabel->setText("密码已重置，请使用新密码登录");
+        m_statusLabel->setStyleSheet("color: #2196F3; font-size: 13px;");
+    }
+    delete forgotPasswordWindow;
 }
 
 void LoginWindow::mousePressEvent(QMouseEvent* event)
@@ -308,7 +373,7 @@ void LoginWindow::generateCaptcha()
     for (int i = 0; i < 4; ++i)
         m_captchaText += chars.at(QRandomGenerator::global()->bounded(chars.size()));
 
-    QPixmap pix(90, 36);
+    QPixmap pix(90, 40);
     pix.fill(Qt::white);
     QPainter painter(&pix);
     QFont font = painter.font();
@@ -322,15 +387,15 @@ void LoginWindow::generateCaptcha()
                      QRandomGenerator::global()->bounded(50, 200),
                      QRandomGenerator::global()->bounded(50, 200));
         painter.setPen(color);
-        painter.drawText(10 + i*20, QRandomGenerator::global()->bounded(22, 32), m_captchaText.mid(i,1));
+        painter.drawText(10 + i*20, QRandomGenerator::global()->bounded(22, 36), m_captchaText.mid(i,1));
     }
     // 干扰线
     for (int i = 0; i < 6; ++i) {
         painter.setPen(QColor(QRandomGenerator::global()->bounded(100, 220),
                               QRandomGenerator::global()->bounded(100, 220),
                               QRandomGenerator::global()->bounded(100, 220)));
-        painter.drawLine(QRandomGenerator::global()->bounded(0, 90), QRandomGenerator::global()->bounded(0, 36),
-                         QRandomGenerator::global()->bounded(0, 90), QRandomGenerator::global()->bounded(0, 36));
+        painter.drawLine(QRandomGenerator::global()->bounded(0, 90), QRandomGenerator::global()->bounded(0, 40),
+                         QRandomGenerator::global()->bounded(0, 90), QRandomGenerator::global()->bounded(0, 40));
     }
     m_captchaLabel->setPixmap(pix);
 }
@@ -351,10 +416,47 @@ void LoginWindow::onUsernameChanged(const QString& username)
         User user = UserManager::getInstance().getUserById(username.trimmed());
         avatarPath = user.getAvatar();
     }
+    
     if (!avatarPath.isEmpty() && QFile::exists(avatarPath)) {
-        m_avatarLabel->setPixmap(QPixmap(avatarPath).scaled(80, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        // 如果用户有自定义头像，显示用户头像
+        QPixmap avatarPixmap(avatarPath);
+        if(!avatarPixmap.isNull()) {
+            // 创建圆形头像
+            QPixmap rounded(80, 80);
+            rounded.fill(Qt::transparent);
+            QPainter painter(&rounded);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(QBrush(avatarPixmap.scaled(80, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+            painter.drawEllipse(0, 0, 80, 80);
+            m_avatarLabel->setPixmap(rounded);
+            m_avatarLabel->setText(""); // 清空文本
+            m_avatarLabel->setStyleSheet(
+                "border-radius: 40px; "
+                "background: #f5f5f5;"
+            );
+        }
     } else {
-        // 使用你icons文件夹下的默认头像（如":/icons/default_avatar.png"）
-        m_avatarLabel->setPixmap(QPixmap(":/icons/default_avatar.png").scaled(80, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        // 使用默认用户符号
+        m_avatarLabel->setPixmap(QPixmap()); // 清空图片
+        m_avatarLabel->setText("👤");
+        m_avatarLabel->setStyleSheet(
+            "border-radius: 40px; "
+            "background: #f5f5f5; "
+            "font-size: 40px; "
+            "color: #999999;"
+        );
+    }
+}
+
+// 最大化按钮的槽函数
+void LoginWindow::onMaximizeClicked()
+{
+    if (isMaximized()) {
+        showNormal();
+        m_maxButton->setText("☐");  // 最大化符号
+    } else {
+        showMaximized();
+        m_maxButton->setText("❐");  // 还原符号
     }
 }

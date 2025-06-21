@@ -26,6 +26,9 @@ public:
     bool registerUser(const QString& nickname, const QString& password, const QString& avatarPath);
     void updateCurrentUserAvatar(const QString& avatarPath);
     
+    // 密码重置
+    bool resetPassword(const QString& username, const QString& newPassword);
+    
     User getContactById(const QString& userId);
     User getUserById(const QString& userId);
 
@@ -36,6 +39,8 @@ signals:
     void contactRemoved(const QString& contactId);
     void registerSuccess();
     void registerFailed(const QString& error);
+    void resetPasswordSuccess();
+    void resetPasswordFailed(const QString& error);
 
 private:
     UserManager();

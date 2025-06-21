@@ -31,8 +31,10 @@ private slots:
     void onContactSelected(const QString& contactId);
     void onAddContactClicked();
     void onMinimizeClicked();
+    void onMaximizeClicked();
     void onCloseClicked();
     void onSettingsClicked();
+    void onLogoutClicked();
 
 private:
     void setupUI();
@@ -51,6 +53,7 @@ private:
 
     // 标题栏按钮
     QPushButton* m_minButton;
+    QPushButton* m_maxButton;
     QPushButton* m_closeButton;
 
     // 导航栏按钮
@@ -70,7 +73,7 @@ private:
 
     QPushButton* m_settingsButton;
 
-    QPushButton* m_refreshButton;
+    QPushButton* m_logoutButton;
 };
 
 #endif // MAINWINDOW_H

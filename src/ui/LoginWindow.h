@@ -28,8 +28,9 @@ private slots:
     void onLoginFailed(const QString& error);
     void onRegisterClicked();
     void onForgotPasswordClicked();
-    void onMinimizeClicked();   // 新增
-    void onCloseClicked();      // 新增
+    void onMinimizeClicked();
+    void onMaximizeClicked();   // 新增最大化槽函数
+    void onCloseClicked();
     void onSendCodeClicked();
     void onUsernameChanged(const QString& username);
 
@@ -44,8 +45,9 @@ private:
     QPushButton* m_loginButton;
     QPushButton* m_sendCodeButton;
     QLabel* m_statusLabel;
-    QPushButton* m_minButton;   // 新增
-    QPushButton* m_closeButton; // 新增
+    QPushButton* m_minButton;
+    QPushButton* m_maxButton;   // 新增最大化按钮
+    QPushButton* m_closeButton;
     QString m_sentCode;
     QTimer* m_codeTimer;
     int m_codeCountdown = 0;

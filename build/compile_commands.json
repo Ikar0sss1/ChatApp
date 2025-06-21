@@ -1,0 +1,134 @@
+[
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\chat_autogen\\mocs_compilation.cpp.obj -c D:\\CLion\\ChatApp\\build\\chat_autogen\\mocs_compilation.cpp",
+  "file": "D:/CLion/ChatApp/build/chat_autogen/mocs_compilation.cpp",
+  "output": "CMakeFiles/chat.dir/chat_autogen/mocs_compilation.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\main.cpp.obj -c D:\\CLion\\ChatApp\\src\\main.cpp",
+  "file": "D:/CLion/ChatApp/src/main.cpp",
+  "output": "CMakeFiles/chat.dir/src/main.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\core\\DatabaseManager.cpp.obj -c D:\\CLion\\ChatApp\\src\\core\\DatabaseManager.cpp",
+  "file": "D:/CLion/ChatApp/src/core/DatabaseManager.cpp",
+  "output": "CMakeFiles/chat.dir/src/core/DatabaseManager.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\core\\MessageHandler.cpp.obj -c D:\\CLion\\ChatApp\\src\\core\\MessageHandler.cpp",
+  "file": "D:/CLion/ChatApp/src/core/MessageHandler.cpp",
+  "output": "CMakeFiles/chat.dir/src/core/MessageHandler.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\core\\NetworkManager.cpp.obj -c D:\\CLion\\ChatApp\\src\\core\\NetworkManager.cpp",
+  "file": "D:/CLion/ChatApp/src/core/NetworkManager.cpp",
+  "output": "CMakeFiles/chat.dir/src/core/NetworkManager.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\core\\UserManager.cpp.obj -c D:\\CLion\\ChatApp\\src\\core\\UserManager.cpp",
+  "file": "D:/CLion/ChatApp/src/core/UserManager.cpp",
+  "output": "CMakeFiles/chat.dir/src/core/UserManager.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\models\\Message.cpp.obj -c D:\\CLion\\ChatApp\\src\\models\\Message.cpp",
+  "file": "D:/CLion/ChatApp/src/models/Message.cpp",
+  "output": "CMakeFiles/chat.dir/src/models/Message.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\models\\User.cpp.obj -c D:\\CLion\\ChatApp\\src\\models\\User.cpp",
+  "file": "D:/CLion/ChatApp/src/models/User.cpp",
+  "output": "CMakeFiles/chat.dir/src/models/User.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\ChatWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\ChatWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/ChatWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/ChatWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\ContactListWidget.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\ContactListWidget.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/ContactListWidget.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/ContactListWidget.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\LoginWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\LoginWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/LoginWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/LoginWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\MainWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\MainWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/MainWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/MainWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\MessageBubble.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\MessageBubble.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/MessageBubble.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/MessageBubble.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\RegisterWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\RegisterWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/RegisterWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/RegisterWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\ForgotPasswordWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\ForgotPasswordWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/ForgotPasswordWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/ForgotPasswordWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\InputWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\InputWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/InputWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/InputWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\DeleteWindow.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\DeleteWindow.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/DeleteWindow.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/DeleteWindow.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\SettingsDialog.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\SettingsDialog.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/SettingsDialog.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/SettingsDialog.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\ui\\EmojiDialog.cpp.obj -c D:\\CLion\\ChatApp\\src\\ui\\EmojiDialog.cpp",
+  "file": "D:/CLion/ChatApp/src/ui/EmojiDialog.cpp",
+  "output": "CMakeFiles/chat.dir/src/ui/EmojiDialog.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\utils\\Config.cpp.obj -c D:\\CLion\\ChatApp\\src\\utils\\Config.cpp",
+  "file": "D:/CLion/ChatApp/src/utils/Config.cpp",
+  "output": "CMakeFiles/chat.dir/src/utils/Config.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\src\\utils\\Logger.cpp.obj -c D:\\CLion\\ChatApp\\src\\utils\\Logger.cpp",
+  "file": "D:/CLion/ChatApp/src/utils/Logger.cpp",
+  "output": "CMakeFiles/chat.dir/src/utils/Logger.cpp.obj"
+},
+{
+  "directory": "D:/CLion/ChatApp/build",
+  "command": "E:\\Qt\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/chat.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\chat.dir\\chat_autogen\\F4FAE6NH3Q\\qrc_resources.cpp.obj -c D:\\CLion\\ChatApp\\build\\chat_autogen\\F4FAE6NH3Q\\qrc_resources.cpp",
+  "file": "D:/CLion/ChatApp/build/chat_autogen/F4FAE6NH3Q/qrc_resources.cpp",
+  "output": "CMakeFiles/chat.dir/chat_autogen/F4FAE6NH3Q/qrc_resources.cpp.obj"
+}
+]

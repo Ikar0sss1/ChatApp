@@ -23,10 +23,9 @@ ChatWindow::ChatWindow(const QString& contactId, QWidget *parent)
 {
     // 移除透明属性
     setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
-    // setAttribute(Qt::WA_TranslucentBackground); // 删除这行
     
-    // 设置背景色为白色
-    setStyleSheet("ChatWindow { background: white; }");
+    // 设置背景色为白色，改为浅灰色背景
+    setStyleSheet("ChatWindow { background: #f5f5f5; }");
     
     setupUI();
     loadChatHistory();
@@ -38,6 +37,43 @@ ChatWindow::ChatWindow(const QString& contactId, QWidget *parent)
             this, &ChatWindow::onConnectionStatusChanged);
     connect(&NetworkManager::getInstance(), &NetworkManager::errorOccurred,
             this, &ChatWindow::onErrorOccurred);
+
+    // 添加对NetworkManager消息接收的直接处理
+    connect(&NetworkManager::getInstance(), &NetworkManager::messageReceived,
+            this, [this](const Message& message){
+        QString myUserId = UserManager::getInstance().getCurrentUserId();
+        QString senderId = message.getSenderId();
+        QString receiverId = message.getReceiverId();
+        
+        // 判断是否属于当前聊天窗口的消息
+        bool isMyMessage = false;
+        
+        if (senderId == myUserId && receiverId == m_contactId) {
+            // 我发送给当前联系人的消息
+            isMyMessage = true;
+        } else if (senderId == m_contactId && receiverId == myUserId) {
+            // 当前联系人发送给我的消息
+            isMyMessage = true;
+        }
+        
+        if (isMyMessage) {
+            // 对于图片消息，无论是发送方还是接收方都需要显示
+            // 对于文本消息，只有接收方需要显示（发送方在发送时已经显示了）
+            if (message.getType() == MessageType::Image || message.getType() == MessageType::File) {
+                // 图片和文件消息：接收方需要显示，发送方已经在发送时显示了
+                if (senderId != myUserId) {
+                    addMessage(message);
+                    qDebug() << "接收方显示图片消息:" << message.getFileName();
+                }
+            } else {
+                // 文本消息：只有接收方需要显示
+                if (senderId != myUserId) {
+                    addMessage(message);
+                    qDebug() << "接收方显示文本消息:" << message.getContent();
+                }
+            }
+        }
+    });
 
     connect(static_cast<DragImageTextEdit*>(m_inputEdit), &DragImageTextEdit::imageDropped, this, [this](const QString& filePath){
         // 直接调用你的图片发送逻辑
@@ -73,11 +109,31 @@ void ChatWindow::setupUI()
     // 创建状态标签
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignCenter);
+    m_statusLabel->setStyleSheet("color: #757575; font-size: 12px; padding: 4px;");
     mainLayout->addWidget(m_statusLabel);
     
     // 创建消息显示区域
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setWidgetResizable(true);
+    m_scrollArea->setStyleSheet(
+        "QScrollArea { border: none; background-color: #f5f5f5; }"
+        "QScrollBar:vertical {"
+        "   background: #f5f5f5;"
+        "   width: 8px;"
+        "   margin: 0px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "   background: #BDBDBD;"
+        "   border-radius: 4px;"
+        "   min-height: 20px;"
+        "}"
+        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {"
+        "   height: 0px;"
+        "}"
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {"
+        "   background: none;"
+        "}"
+    );
     m_messageContainer = new QWidget(m_scrollArea);
     m_messageLayout = new QVBoxLayout(m_messageContainer);
     m_messageLayout->setAlignment(Qt::AlignTop);
@@ -93,7 +149,8 @@ void ChatWindow::setupUI()
     m_inputEdit->setMaximumHeight(100);
     m_inputEdit->setStyleSheet(
         "QTextEdit { "
-        "   border: 1px solid #E0E0E0; "
+        "   border: none; "
+        "   background-color: white; "
         "   border-radius: 4px; "
         "   padding: 8px; "
         "   font-size: 14px; "
@@ -107,13 +164,13 @@ void ChatWindow::setupUI()
     m_emojiButton->setText("表情"); // 或 setIcon(QIcon(":/icons/emoji.png"));
     m_emojiButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
-        "   border-radius: 8px; "
+        "   border-radius: 4px; "
         "   color: white; "
-        "   font-size: 16px; "
+        "   font-size: 14px; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     connect(m_emojiButton, &QPushButton::clicked, this, &ChatWindow::onEmojiClicked);
     inputLayout->addWidget(m_emojiButton);
@@ -124,13 +181,13 @@ void ChatWindow::setupUI()
     m_imageButton->setText("图片");
     m_imageButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
-        "   border-radius: 8px; "
+        "   border-radius: 4px; "
         "   color: white; "
-        "   font-size: 16px; "
+        "   font-size: 14px; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     connect(m_imageButton, &QPushButton::clicked, this, &ChatWindow::onImageClicked);
     inputLayout->addWidget(m_imageButton);
@@ -141,13 +198,13 @@ void ChatWindow::setupUI()
     m_fileButton->setText("文件"); // 或 setIcon(QIcon(":/icons/file.png"));
     m_fileButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
-        "   border-radius: 8px; "
+        "   border-radius: 4px; "
         "   color: white; "
-        "   font-size: 16px; "
+        "   font-size: 14px; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     connect(m_fileButton, &QPushButton::clicked, this, &ChatWindow::onFileClicked);
     inputLayout->addWidget(m_fileButton);
@@ -157,13 +214,13 @@ void ChatWindow::setupUI()
     m_sendButton->setFixedSize(80, 40);
     m_sendButton->setStyleSheet(
         "QPushButton { "
-        "   background: #07C160; "
+        "   background: #2196F3; "
         "   border: none; "
         "   border-radius: 4px; "
         "   color: white; "
         "   font-size: 14px; "
         "} "
-        "QPushButton:hover { background: #06AD56; }"
+        "QPushButton:hover { background: #1E88E5; }"
     );
     connect(m_sendButton, &QPushButton::clicked, this, &ChatWindow::onSendClicked);
     inputLayout->addWidget(m_sendButton);
@@ -173,12 +230,6 @@ void ChatWindow::setupUI()
     // 创建表情选择对话框
     m_emojiDialog = new EmojiDialog(this);
     connect(m_emojiDialog, &EmojiDialog::emojiSelected, this, &ChatWindow::onEmojiSelected);
-
-    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(18); // 建议18以内
-    shadow->setOffset(0, 4);
-    shadow->setColor(QColor(0, 0, 0, 60));
-    setGraphicsEffect(shadow);
 
     setMinimumSize(400, 500); // 保证窗口有足够空间
 }
@@ -200,7 +251,7 @@ void ChatWindow::addMessage(const Message& message)
     if (!lastTime.isValid() || lastTime.secsTo(message.getTimestamp()) > 300) {
         QLabel* timeLabel = new QLabel(message.getTimestamp().toString("yyyy/MM/dd HH:mm"));
         timeLabel->setAlignment(Qt::AlignCenter);
-        timeLabel->setStyleSheet("color: #999; font-size: 12px; margin: 16px 0 8px 0;");
+        timeLabel->setStyleSheet("color: #9E9E9E; font-size: 12px; margin: 16px 0 8px 0;");
         m_messageLayout->addWidget(timeLabel);
         lastTime = message.getTimestamp();
     }
@@ -224,7 +275,7 @@ void ChatWindow::addMessage(const Message& message)
         QPixmap pixmap;
         pixmap.loadFromData(message.getFileData());
         imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        imageLabel->setStyleSheet("border-radius: 8px;");
+        imageLabel->setStyleSheet("border-radius: 4px; padding: 4px; background: white;");
         imageLabel->setCursor(Qt::PointingHandCursor);
         imageLabel->installEventFilter(this);
         contentWidget = imageLabel;
@@ -234,7 +285,7 @@ void ChatWindow::addMessage(const Message& message)
         fileLabel->setTextFormat(Qt::RichText);
         fileLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
         fileLabel->setOpenExternalLinks(false);
-        fileLabel->setStyleSheet("background: #fff; color: #222; border-radius: 8px; padding: 10px 16px; border: 1px solid #F0F0F0; max-width: 380px;");
+        fileLabel->setStyleSheet("background: white; color: #2196F3; border-radius: 4px; padding: 10px 16px; max-width: 380px;");
         connect(fileLabel, &QLabel::linkActivated, this, [=](){
             QString savePath = QFileDialog::getSaveFileName(this, "保存文件", message.getFileName());
             if (!savePath.isEmpty()) {
@@ -254,8 +305,8 @@ void ChatWindow::addMessage(const Message& message)
         messageLabel->setWordWrap(true);
         messageLabel->setTextFormat(Qt::PlainText);
         messageLabel->setStyleSheet(isOutgoing ?
-            "background: #95EC69; color: #222; border-radius: 8px; padding: 10px 16px; max-width: 380px;" :
-            "background: #fff; color: #222; border-radius: 8px; padding: 10px 16px; border: 1px solid #F0F0F0; max-width: 380px;");
+            "background: #DCF8C6; color: #222; border-radius: 4px; padding: 10px 16px; max-width: 380px;" :
+            "background: white; color: #222; border-radius: 4px; padding: 10px 16px; max-width: 380px;");
         contentWidget = messageLabel;
     }
 
@@ -414,10 +465,30 @@ bool ChatWindow::eventFilter(QObject* obj, QEvent* event)
         if (imageLabel) {
             QDialog* dialog = new QDialog(this);
             dialog->setWindowTitle("查看图片");
+            dialog->setStyleSheet("background-color: #f5f5f5; border: none;");
+            
             QVBoxLayout* layout = new QVBoxLayout(dialog);
             QLabel* bigImage = new QLabel(dialog);
             bigImage->setPixmap(imageLabel->pixmap().scaled(800, 800, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             layout->addWidget(bigImage);
+            
+            QPushButton* closeButton = new QPushButton("关闭", dialog);
+            closeButton->setStyleSheet(
+                "QPushButton {"
+                "   background: #2196F3;"
+                "   color: white;"
+                "   border: none;"
+                "   border-radius: 4px;"
+                "   padding: 8px 16px;"
+                "   font-size: 14px;"
+                "}"
+                "QPushButton:hover { background: #1E88E5; }"
+            );
+            connect(closeButton, &QPushButton::clicked, dialog, &QDialog::accept);
+            
+            layout->addWidget(closeButton);
+            layout->setAlignment(closeButton, Qt::AlignHCenter);
+            
             dialog->exec();
             delete dialog;
             return true;

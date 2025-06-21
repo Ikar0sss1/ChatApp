@@ -1,0 +1,5 @@
+D:/CLion/ChatApp/build/CMakeFiles/chat.dir
+D:/CLion/ChatApp/build/CMakeFiles/edit_cache.dir
+D:/CLion/ChatApp/build/CMakeFiles/rebuild_cache.dir
+D:/CLion/ChatApp/build/CMakeFiles/chat_autogen_timestamp_deps.dir
+D:/CLion/ChatApp/build/CMakeFiles/chat_autogen.dir

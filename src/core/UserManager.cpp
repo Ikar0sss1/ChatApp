@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <QSqlError>
 
 UserManager::UserManager()
 {
@@ -188,4 +189,38 @@ User UserManager::getContactById(const QString& userId)
 User UserManager::getUserById(const QString& userId)
 {
     return DatabaseManager::getInstance().getUserById(userId);
+}
+
+bool UserManager::resetPassword(const QString& username, const QString& newPassword)
+{
+    if (username.isEmpty() || newPassword.isEmpty()) {
+        emit resetPasswordFailed("用户名或密码不能为空");
+        return false;
+    }
+
+    // 检查用户是否存在
+    User user = DatabaseManager::getInstance().getUserById(username);
+    if (user.getUserId().isEmpty()) {
+        emit resetPasswordFailed("用户不存在");
+        return false;
+    }
+
+    // 更新密码
+    QSqlQuery query(DatabaseManager::getInstance().getDatabase());
+    query.prepare("UPDATE users SET password=? WHERE username=?");
+    query.addBindValue(newPassword);
+    query.addBindValue(username);
+
+    if (!query.exec()) {
+        emit resetPasswordFailed("数据库错误: " + query.lastError().text());
+        return false;
+    }
+
+    if (query.numRowsAffected() <= 0) {
+        emit resetPasswordFailed("密码更新失败");
+        return false;
+    }
+
+    emit resetPasswordSuccess();
+    return true;
 }
